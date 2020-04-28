@@ -24,9 +24,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '$!8%&wwzb#q%y2q6-^u^3-ud)%ir*ft&=ou3=0q$*7p#je4(^5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['64.225.110.71', '127.0.0.1']
 
 SIMPLE_JWT = {
      'ACCESS_TOKEN_LIFETIME': timedelta(hours=72),
@@ -46,11 +46,6 @@ INSTALLED_APPS = [
     'corsheaders'
 ]
 
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3000",
-    "http://localhost:19006",
-    ]
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -63,10 +58,6 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
 ]
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-
 ROOT_URLCONF = 'Project.urls'
 
 TEMPLATES = [
