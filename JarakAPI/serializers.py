@@ -11,7 +11,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_owner(self, obj):
-        return "%s" % (obj.owner.username)
+        return obj.owner.username
 
 class RentedSerializer(serializers.ModelSerializer):
     tenant = serializers.SerializerMethodField()
@@ -22,12 +22,14 @@ class RentedSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_owner(self, obj):
-        return "%s" % (obj.tenant.username)
+        return obj.tenant.username
+
 
 class UserSerializer(serializers.ModelSerializer):    
     class Meta:
         model = User
         fields = ['first_name','last_name','email','username']
+
 
 class ProfileSerializer(serializers.ModelSerializer):
 	user = UserSerializer()
@@ -36,15 +38,18 @@ class ProfileSerializer(serializers.ModelSerializer):
 		model = Profile
 		fields = '__all__'
 
+
 class ProfileUpdateSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Profile
 		fields = ['location','avatar']        
 
+
 class CreateProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
+
 #Authentication-----------------------------------------------------------------------------------------------
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -54,15 +59,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         fields = ['first_name','last_name','email','username', 'password']
 
     def create(self, validated_data):
-        first_name=validated_data['first_name']
-        last_name=validated_data['last_name']
-        email=validated_data['email']
-        username = validated_data['username']
-        password = validated_data['password']
-        new_user = User(username=username)
-        new_user.set_password(password)
-        new_user.first_name=(first_name)
-        new_user.last_name=(last_name)
-        new_user.email=(email)
+        new_user = User(**validated_data)
+        new_user.set_password(validated_data['password'])
         new_user.save()
         return validated_data

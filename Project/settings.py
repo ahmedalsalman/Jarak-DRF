@@ -26,11 +26,9 @@ SECRET_KEY = '$!8%&wwzb#q%y2q6-^u^3-ud)%ir*ft&=ou3=0q$*7p#je4(^5'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['64.225.110.71', '127.0.0.1', ]
 
-SIMPLE_JWT = {
-     'ACCESS_TOKEN_LIFETIME': timedelta(hours=72),
-}
+
 
 # Application definition
 
@@ -45,11 +43,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders'
 ]
-
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3000",
-    "http://localhost:19006",
-    ]
 
 
 MIDDLEWARE = [
@@ -92,6 +85,16 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
+
+SIMPLE_JWT = {
+     'ACCESS_TOKEN_LIFETIME': timedelta(hours=72),
+}
+
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:3000",
+    "http://localhost:19006",
+    "http://64.225.110.71",
+]
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
