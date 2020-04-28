@@ -34,7 +34,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Profile
-		fields = ['location','avatar', 'user']
+		fields = '__all__'
 
 class ProfileUpdateSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -66,27 +66,3 @@ class UserCreateSerializer(serializers.ModelSerializer):
         new_user.email=(email)
         new_user.save()
         return validated_data
-
-
-class UserLoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
-    password = serializers.CharField(write_only=True)
-    access = serializers.CharField(allow_blank=True, read_only=True)
-
-    def validate(self, data):
-        my_username = data.get('username')
-        my_password = data.get('password')
-
-        try:
-            user_obj = User.objects.get(username=my_username)
-        except:
-            raise serializers.ValidationError("This username does not exist")
-
-        if not user_obj.check_password(my_password):
-            raise serializers.ValidationError(
-                "Incorrect username or password!")
-        payload = RefreshToken.for_user(user_obj)
-        token = str(payload.access_token)
-
-        data["access"] = token
-        return data

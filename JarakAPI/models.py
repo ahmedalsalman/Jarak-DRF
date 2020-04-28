@@ -4,7 +4,7 @@ from datetime import datetime
 from django.contrib.auth import get_user_model
 from django.dispatch import receiver
 from django.db.models.signals import post_save
-
+from hashlib import md5
 
 class Product(models.Model):
 	name = models.CharField(max_length=150)
@@ -16,9 +16,6 @@ class Product(models.Model):
 
 	def __str__(self):
 		return self.name
-
-	class Meta:
-		verbose_name_plural = "Product"
 
 class RentedItem(models.Model):
 	tenant = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -42,8 +39,15 @@ class Profile(models.Model):
 	]
 	user = models.OneToOneField(User, on_delete=models.CASCADE,related_name="profile")
 	location = models.CharField(max_length=25, choices=REGIONS, default=Abdali)
-	avatar = models.TextField(null=True, blank=True)
+	def avatar(self, size):
+		digest = md5(self.user.email.lower().encode('utf-8')).hexdigest()
+		return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
 
 
 	def __str__(self):
-		return str(self.user.username)        
+		return str(self.user.username)
+
+@receiver(post_save, sender=get_user_model())
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
