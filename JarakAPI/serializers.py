@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Profile
+from .models import Product, Profile, RentedItem
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 
@@ -12,6 +12,17 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def get_owner(self, obj):
         return "%s" % (obj.owner.username)
+
+class RentedSerializer(serializers.ModelSerializer):
+    tenant = serializers.SerializerMethodField()
+    product = ProductSerializer()
+    
+    class Meta:
+        model = RentedItem
+        fields = '__all__'
+
+    def get_owner(self, obj):
+        return "%s" % (obj.tenant.username)
 
 class UserSerializer(serializers.ModelSerializer):    
     class Meta:

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Product, Profile
 from django.contrib.auth.models import User
-from .serializers import  ProductSerializer, ProfileSerializer, ProfileUpdateSerializer, CreateProductSerializer, UserCreateSerializer, UserLoginSerializer
+from .serializers import  ProductSerializer, ProfileSerializer, ProfileUpdateSerializer, CreateProductSerializer, UserCreateSerializer, UserLoginSerializer, RentedSerializer
 # DRF Imports:
 from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, RetrieveAPIView, DestroyAPIView
 from rest_framework.response import Response
@@ -32,7 +32,7 @@ class ProfileUpdate(UpdateAPIView):
     lookup_url_kwarg = 'profile_id'
 
 class Update(UpdateAPIView):
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAuthenticated, ]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'id'
@@ -40,14 +40,21 @@ class Update(UpdateAPIView):
 
 class Create(CreateAPIView):
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated,IsAdminUser]
+    permission_classes = [IsAuthenticated,]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+class CreateRent(CreateAPIView):
+    serializer_class = RentedSerializer
+    permission_classes = [IsAuthenticated,]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
 class Delete(DestroyAPIView):
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAuthenticated, ]
     queryset = Product.objects.all()
     lookup_field = 'id'
     lookup_url_kwarg = 'product_id'

@@ -20,6 +20,13 @@ class Product(models.Model):
 	class Meta:
 		verbose_name_plural = "Product"
 
+class RentedItem(models.Model):
+	tenant = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+	product = models.OneToOneField(Product,on_delete=models.CASCADE)
+	date = models.DateTimeField(default=datetime.now())
+	rented = models.BooleanField(default = True) #might change this to charFiled with choices (rented, unrented, on queue)
+
+
 class Profile(models.Model):
 	Abdali = 'Abdali'
 	Arjan = 'Arjan'

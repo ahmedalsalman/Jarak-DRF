@@ -29,6 +29,7 @@ urlpatterns = [
     path('signup/', views.Register.as_view(), name="signup"),
     path('login/', TokenObtainPairView.as_view(), name="login"),
 
+    path('rent/', views.CreateRent.as_view(), name="rent"),
     path('create/', views.Create.as_view(), name="create"),
     path('update/<int:product_id>/', views.Update.as_view(), name='update'),
     path('update_info/<int:profile_id>/', views.ProfileUpdate.as_view(), name='update-info'),
