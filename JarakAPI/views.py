@@ -48,7 +48,7 @@ class CreateRent(CreateAPIView):
     permission_classes = [IsAuthenticated,]
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        serializer.save(tenant=self.request.user.profile)
 
 class Delete(DestroyAPIView):
     serializer_class = ProductSerializer
