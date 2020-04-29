@@ -8,10 +8,10 @@ class ProductSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ['id', 'owner', 'name', 'description', 'image']
 
     def get_owner(self, obj):
-        return obj.owner.username
+        return obj.owner.user.username
 
 class RentedSerializer(serializers.ModelSerializer):
     
