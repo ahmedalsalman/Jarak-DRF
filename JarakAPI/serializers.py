@@ -3,6 +3,7 @@ from .models import Product, Profile, RentedItem
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 
+
 class ProductSerializer(serializers.ModelSerializer):
     owner = serializers.SerializerMethodField()
     
@@ -13,12 +14,12 @@ class ProductSerializer(serializers.ModelSerializer):
     def get_owner(self, obj):
         return obj.owner.user.username
 
+
 class RentedSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = RentedItem
         fields = ['product','end_datetime']
-
 
 
 class UserSerializer(serializers.ModelSerializer):    
@@ -55,6 +56,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         fields = ['first_name','last_name','email','username', 'password']
 
     def create(self, validated_data):
+        # Using class method
         new_user = User(**validated_data)
         new_user.set_password(validated_data['password'])
         new_user.save()

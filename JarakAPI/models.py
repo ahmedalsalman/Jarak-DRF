@@ -40,9 +40,21 @@ class Product(models.Model):
 	def __str__(self):
 		return self.name
 
+	def rented_by(self):
+		history = self.history.all()
+		if history.exists():
+			tenant = history.last().tenant
+			if tenant.end_datetime is None:
+				return tenant
+		return None
+
 
 class RentedItem(models.Model):
-	tenant = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
-	product = models.ForeignKey(Product,on_delete=models.CASCADE)
+	tenant = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True, related_name='history')
+	product = models.ForeignKey(Product,on_delete=models.CASCADE, related_name='history')
 	start_datetime = models.DateTimeField(auto_now_add=True, null=True)
 	end_datetime = models.DateTimeField(null=True)
+
+	class Meta:
+		ordering = ('start_datetime', )
+
