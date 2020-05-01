@@ -26,7 +26,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('products/', views.ProductList.as_view(), name="products"),
     path('profile/', views.ProfileDetails.as_view(), name="profile"),
-    path('profile/<int:profile_id>/, views.ProductOwnerProfile.as_view(), name="owner-profile"),
+    path('profile/<int:profile_id>/', views.ProductOwnerProfile.as_view(), name="owner-profile"),
     path('signup/', views.Register.as_view(), name="signup"),
     path('login/', TokenObtainPairView.as_view(), name="login"),
 
