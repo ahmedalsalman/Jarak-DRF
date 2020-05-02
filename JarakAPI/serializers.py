@@ -3,34 +3,6 @@ from .models import Product, Profile, RentedItem
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 
-# class OwnerSerializer(serializers.ModelSerializer):
-#     owner = serializers.SerializerMethodField()
-#     owner_id = serializers.SerializerMethodField()
-#     class Meta:
-#         model=Product
-#         fields=['owner_id','owner']
-
-#     def get_owner(self, obj):
-#         return obj.user.username
-
-#     def get_owner_id(self, obj):
-#         return obj.user.id
-
-class ProductSerializer(serializers.ModelSerializer):
-    owner = UserSerializer()
-    
-    class Meta:
-        model = Product
-        fields = ['id', 'owner', 'name', 'description', 'image', 'image2', 'image3', 'image4']
-
-class RentedSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = RentedItem
-        fields = ['product','end_datetime']
-
-
-
 class UserSerializer(serializers.ModelSerializer):    
     class Meta:
         model = User
@@ -43,6 +15,37 @@ class ProfileSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Profile
 		fields = '__all__'
+
+class OwnerSerializer(serializers.ModelSerializer):
+    owner = serializers.SerializerMethodField()
+    owner_id = serializers.SerializerMethodField()
+    class Meta:
+        model=Product
+        fields=['owner_id','owner']
+
+    def get_owner(self, obj):
+        return obj.user.username
+
+    def get_owner_id(self, obj):
+        return obj.user.id
+
+class ProductSerializer(serializers.ModelSerializer):
+    owner = ProfileSerializer()
+    
+    class Meta:
+        model = Product
+        fields = ['id', 'owner', 'name', 'description', 'image', 'image2', 'image3', 'image4']
+
+    # def get_owner(self, obj):
+    #     return obj.owner.user.username
+
+class RentedSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = RentedItem
+        fields = ['product','end_datetime']
+
+
 
 
 class ProfileUpdateSerializer(serializers.ModelSerializer):
