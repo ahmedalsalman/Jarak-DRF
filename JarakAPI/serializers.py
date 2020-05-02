@@ -3,6 +3,20 @@ from .models import Product, Profile, RentedItem
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 
+class OwnerSerializer(serializers.ModelSerializer):
+    owner = serializers.SerializerMethodField()
+    owner_id = serializers.SerializerMethodField()
+    class Meta:
+        model=Product
+        fields=['owner_id','owner']
+
+    def get_owner(self, obj):
+        return obj.user.username
+
+    def get_owner_id(self, obj):
+        return obj.user.id
+
+
 class ProductSerializer(serializers.ModelSerializer):
     owner = serializers.SerializerMethodField()
     
