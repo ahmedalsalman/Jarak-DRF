@@ -18,10 +18,10 @@ class ProfileSerializer(serializers.ModelSerializer):
 		model = Profile
 		fields = ['user', 'location', 'avatar']
 	def get_avatar(self, obj):
-	  return obj.avatar(250)     
+	  return obj.avatar(512)     
 
 class ProductSerializer(serializers.ModelSerializer):
-	owner = ProfileSerializer()
+	owner = ProfileSerializer(read_only=True)
 	rented_by = serializers.SerializerMethodField()
 	
 	class Meta:
