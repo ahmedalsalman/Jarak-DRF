@@ -18,11 +18,10 @@ class Profile(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="profile")
     location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True)
-
+    image = models.TextField(default="https://img.favpng.com/25/7/23/computer-icons-user-profile-avatar-image-png-favpng-LFqDyLRhe3PBXM0sx2LufsGFU.jpg")
     def avatar(self, size):
         digest = md5(self.user.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
-
     def __str__(self):
         return self.user.username
 
@@ -36,10 +35,11 @@ def create_user_profile(sender, instance, created, **kwargs):
 class Product(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField(null=True, blank=True)
-    owner = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, null=True, related_name="renting")
+    owner = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, related_name="renting")
     image = models.TextField(null=True, blank=True)
-
+    image2 = models.TextField(null=True, blank=True)
+    image3 = models.TextField(null=True, blank=True)
+    image4 = models.TextField(null=True, blank=True)
     def __str__(self):
         return self.name
 

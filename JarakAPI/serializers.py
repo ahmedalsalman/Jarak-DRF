@@ -8,7 +8,7 @@ class ProductSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Product
-        fields = ['id', 'owner', 'name', 'description', 'image']
+        fields = ['id', 'owner', 'name', 'description', 'image', 'image2', 'image3', 'image4']
 
     def get_owner(self, obj):
         return obj.owner.user.username
