@@ -16,28 +16,15 @@ class ProfileSerializer(serializers.ModelSerializer):
 		model = Profile
 		fields = '__all__'
 
-class OwnerSerializer(serializers.ModelSerializer):
-    owner = serializers.SerializerMethodField()
-    owner_id = serializers.SerializerMethodField()
-    class Meta:
-        model=Product
-        fields=['owner_id','owner']
-
-    def get_owner(self, obj):
-        return obj.user.username
-
-    def get_owner_id(self, obj):
-        return obj.user.id
-
 class ProductSerializer(serializers.ModelSerializer):
     owner = ProfileSerializer()
-    
+    rented_by = serializers.SerializerMethodField()
     class Meta:
         model = Product
-        fields = ['id', 'owner', 'name', 'description', 'image', 'image2', 'image3', 'image4']
+        fields = ['id', 'owner', 'name', 'description', 'image', 'image2', 'image3', 'image4', 'rented_by']
 
-    # def get_owner(self, obj):
-    #     return obj.owner.user.username
+    def get_rented_by(self, obj):
+        return obj.rented_by()
 
 class RentedSerializer(serializers.ModelSerializer):
     
@@ -45,14 +32,16 @@ class RentedSerializer(serializers.ModelSerializer):
         model = RentedItem
         fields = ['product','end_datetime']
 
-
-
+class RentedListSerializer(serializers.ModelSerializer):
+	
+	class Meta:
+		model = RentedItem
+		fields = '__all__'
 
 class ProfileUpdateSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Profile
 		fields = ['location','avatar']        
-
 
 class CreateProductSerializer(serializers.ModelSerializer):
     class Meta:

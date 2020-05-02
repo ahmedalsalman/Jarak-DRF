@@ -43,6 +43,13 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    def rented_by(self):
+        history = self.history.all()
+        if history.exists():
+            tenant = history.last().tenant
+            if history.last().end_datetime is None:
+                return tenant.id
+        return None
 
 class RentedItem(models.Model):
     tenant = models.ForeignKey(

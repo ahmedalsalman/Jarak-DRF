@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from .models import Product, Profile
+from .models import Product, Profile, RentedItem
 from django.contrib.auth.models import User
-from .serializers import  ProductSerializer, ProfileSerializer, ProfileUpdateSerializer, CreateProductSerializer, UserCreateSerializer, RentedSerializer
+from .serializers import  ProductSerializer, RentedListSerializer, ProfileSerializer, ProfileUpdateSerializer, CreateProductSerializer, UserCreateSerializer, RentedSerializer
 from .permissions import IsProductOwner
 
 # DRF Imports:
@@ -12,6 +12,10 @@ from rest_framework.permissions import AllowAny, IsAuthenticated,IsAdminUser
 class Register(CreateAPIView):
     serializer_class = UserCreateSerializer
 
+class RentList(ListAPIView):
+    serializer_class = RentedListSerializer
+    queryset = RentedItem.objects.all()
+
 class ProductList(ListAPIView):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
@@ -21,7 +25,7 @@ class ProfileDetails(RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     def get_object(self):
         return Profile.objects.get(user=self.request.user)
-        
+
 class ProductOwnerProfile(RetrieveAPIView):
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated]
@@ -53,9 +57,6 @@ class Create(CreateAPIView):
 class CreateRent(CreateAPIView):
     serializer_class = RentedSerializer
     permission_classes = [IsAuthenticated,]
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
 
 class Delete(DestroyAPIView):
     serializer_class = ProductSerializer
