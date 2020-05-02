@@ -18,7 +18,6 @@ class Profile(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="profile")
     location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True)
-    image = models.TextField(default="https://img.favpng.com/25/7/23/computer-icons-user-profile-avatar-image-png-favpng-LFqDyLRhe3PBXM0sx2LufsGFU.jpg")
     def avatar(self, size):
         digest = md5(self.user.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
@@ -52,8 +51,7 @@ class Product(models.Model):
         return None
 
 class RentedItem(models.Model):
-    tenant = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, null=True, blank=True)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    tenant = models.ForeignKey( Profile, on_delete=models.CASCADE, null=True, blank=True, related_name="history")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="history")
     start_datetime = models.DateTimeField(auto_now_add=True, null=True)
     end_datetime = models.DateTimeField(null=True)
