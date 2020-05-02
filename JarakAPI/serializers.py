@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 class UserSerializer(serializers.ModelSerializer):    
 	class Meta:
 		model = User
-		fields = ['first_name','last_name','email','username']
+		fields = ['id', 'first_name','last_name','email','username']
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -26,7 +26,7 @@ class ProductSerializer(serializers.ModelSerializer):
 	
 	class Meta:
 		model = Product
-		fields = ['id', 'owner', 'name', 'description', 'image1','image2','image3','image4', 'rented_by']
+		fields = ['id', 'owner', 'name', 'description', 'image','image2','image3','image4', 'rented_by']
 
 	def get_rented_by(self, obj):
 		return obj.rented_by()
