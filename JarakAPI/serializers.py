@@ -3,29 +3,25 @@ from .models import Product, Profile, RentedItem
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 
-class OwnerSerializer(serializers.ModelSerializer):
-    owner = serializers.SerializerMethodField()
-    owner_id = serializers.SerializerMethodField()
-    class Meta:
-        model=Product
-        fields=['owner_id','owner']
+# class OwnerSerializer(serializers.ModelSerializer):
+#     owner = serializers.SerializerMethodField()
+#     owner_id = serializers.SerializerMethodField()
+#     class Meta:
+#         model=Product
+#         fields=['owner_id','owner']
 
-    def get_owner(self, obj):
-        return obj.user.username
+#     def get_owner(self, obj):
+#         return obj.user.username
 
-    def get_owner_id(self, obj):
-        return obj.user.id
-
+#     def get_owner_id(self, obj):
+#         return obj.user.id
 
 class ProductSerializer(serializers.ModelSerializer):
-    owner = serializers.SerializerMethodField()
+    owner = UserSerializer()
     
     class Meta:
         model = Product
         fields = ['id', 'owner', 'name', 'description', 'image', 'image2', 'image3', 'image4']
-
-    def get_owner(self, obj):
-        return obj.owner.user.username
 
 class RentedSerializer(serializers.ModelSerializer):
     
@@ -38,7 +34,7 @@ class RentedSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):    
     class Meta:
         model = User
-        fields = ['first_name','last_name','email','username']
+        fields = ['id', 'first_name','last_name','email','username']
 
 
 class ProfileSerializer(serializers.ModelSerializer):
