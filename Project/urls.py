@@ -33,6 +33,7 @@ urlpatterns = [
     path('rent/', views.CreateRent.as_view(), name="rent"),
     path('create/', views.Create.as_view(), name="create"),
     path('update/<int:product_id>/', views.Update.as_view(), name='update'),
+    path('return/<int:rentedItem_id>/', views.ReturnRent.as_view(), name='return'),
     path('update_info/<int:profile_id>/', views.ProfileUpdate.as_view(), name='update-info'),
     path('delete/<int:product_id>/', views.Delete.as_view(), name='delete'),
 ]

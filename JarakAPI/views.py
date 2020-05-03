@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from .models import Product, Profile, RentedItem
 from django.contrib.auth.models import User
-from .serializers import  ProductSerializer, RentedListSerializer, ProfileSerializer, ProfileUpdateSerializer, CreateProductSerializer, UserCreateSerializer, RentedSerializer
+from .serializers import  ProductSerializer, RentedListSerializer, ProfileSerializer, ProfileUpdateSerializer, CreateProductSerializer, UserCreateSerializer, RentedSerializer, ReturnSerializer
 from .permissions import IsProductOwner
+from datetime import datetime
 
 # DRF Imports:
 from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, RetrieveAPIView, DestroyAPIView
@@ -11,10 +12,6 @@ from rest_framework.permissions import AllowAny, IsAuthenticated,IsAdminUser
 
 class Register(CreateAPIView):
     serializer_class = UserCreateSerializer
-
-class RentList(ListAPIView):
-    serializer_class = RentedListSerializer
-    queryset = RentedItem.objects.all()
 
 class ProductList(ListAPIView):
     serializer_class = ProductSerializer
@@ -54,10 +51,25 @@ class Create(CreateAPIView):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user.profile)
 
+#--------------------------Rent related views----------------------------------------------------------------------------
+
+class RentList(ListAPIView):
+    serializer_class = RentedListSerializer
+    queryset = RentedItem.objects.all()
+
 class CreateRent(CreateAPIView):
     serializer_class = RentedSerializer
     permission_classes = [IsAuthenticated,]
 
+class ReturnRent(UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = RentedItem.objects.all()
+    serializer_class = ReturnSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'rentedItem_id'
+    def perform_update(self, serializer):
+        serializer.save(end_datetime=datetime.now())  
+   
 class Delete(DestroyAPIView):
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated, IsProductOwner]
