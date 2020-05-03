@@ -35,7 +35,13 @@ class RentedSerializer(serializers.ModelSerializer):
 	
 	class Meta:
 		model = RentedItem
-		fields = ['tenant', 'product','end_datetime']
+		fields = ['tenant', 'product']
+
+class ReturnSerializer(serializers.ModelSerializer):
+	
+	class Meta:
+		model = RentedItem
+		fields = ['end_datetime']        
 
 class RentedListSerializer(serializers.ModelSerializer):
 	
