@@ -17,30 +17,29 @@ class ProfileSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Profile
 		fields = ['user', 'location', 'avatar']
+	
 	def get_avatar(self, obj):
 	  return obj.avatar(512)     
+
 
 class ProductSerializer(serializers.ModelSerializer):
 	owner = ProfileSerializer(read_only=True)
 	rented_by = serializers.SerializerMethodField()
-	
+	# Create ImageSerializer()
+	images = ImageSerializer(many=True)
 	class Meta:
 		model = Product
-		fields = ['id', 'owner', 'name', 'description', 'image','image2','image3','image4', 'rented_by']
+		fields = ['id', 'owner', 'name', 'description', 'images', 'rented_by']
 
 	def get_rented_by(self, obj):
 		return obj.rented_by()
+
 
 class RentedSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = RentedItem
 		fields = ['tenant', 'product']
 
-class ReturnSerializer(serializers.ModelSerializer):
-
-	class Meta:
-		model = RentedItem
-		fields = ['end_datetime'] 
 
 class RentedListSerializer(serializers.ModelSerializer):
 	product=ProductSerializer()
@@ -53,7 +52,7 @@ class RentedListSerializer(serializers.ModelSerializer):
 class ProfileUpdateSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Profile
-		fields = ['location','avatar']        
+		fields = ['location',]
 
 
 class CreateProductSerializer(serializers.ModelSerializer):
@@ -73,4 +72,4 @@ class UserCreateSerializer(serializers.ModelSerializer):
 		new_user = User(**validated_data)
 		new_user.set_password(validated_data['password'])
 		new_user.save()
-		return 
+		return validated_data

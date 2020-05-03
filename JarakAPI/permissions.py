@@ -1,5 +1,4 @@
 from rest_framework.permissions import BasePermission
-from datetime import date
 
 class IsProductOwner(BasePermission):
 	message = "You must be the owner of this product"

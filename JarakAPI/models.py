@@ -18,9 +18,11 @@ class Profile(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="profile")
     location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True)
+    
     def avatar(self, size):
         digest = md5(self.user.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
+    
     def __str__(self):
         return self.user.username
 
@@ -35,10 +37,7 @@ class Product(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField(null=True, blank=True)
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, related_name="renting")
-    image = models.TextField(null=True, blank=True)
-    image2 = models.TextField(null=True, blank=True)
-    image3 = models.TextField(null=True, blank=True)
-    image4 = models.TextField(null=True, blank=True)
+    
     def __str__(self):
         return self.name
 
@@ -49,6 +48,12 @@ class Product(models.Model):
             if history.last().end_datetime is None:
                 return tenant.id
         return None
+
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, related_name="images")
+    img = models.ImageField(upload_to='product_images')
+
 
 class RentedItem(models.Model):
     tenant = models.ForeignKey( Profile, on_delete=models.CASCADE, null=True, blank=True, related_name="history")
