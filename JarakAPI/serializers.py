@@ -32,19 +32,19 @@ class ProductSerializer(serializers.ModelSerializer):
 		return obj.rented_by()
 
 class RentedSerializer(serializers.ModelSerializer):
-	
 	class Meta:
 		model = RentedItem
 		fields = ['tenant', 'product']
 
 class ReturnSerializer(serializers.ModelSerializer):
-	
+
 	class Meta:
 		model = RentedItem
-		fields = ['end_datetime']        
+		fields = ['end_datetime'] 
 
 class RentedListSerializer(serializers.ModelSerializer):
-	
+	product=ProductSerializer()
+	tenant=ProfileSerializer()
 	class Meta:
 		model = RentedItem
 		fields = '__all__'

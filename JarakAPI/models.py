@@ -54,4 +54,4 @@ class RentedItem(models.Model):
     tenant = models.ForeignKey( Profile, on_delete=models.CASCADE, null=True, blank=True, related_name="history")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="history")
     start_datetime = models.DateTimeField(auto_now_add=True, null=True)
-    end_datetime = models.DateTimeField(null=True)
+    end_datetime = models.DateTimeField(null=True, blank=True)

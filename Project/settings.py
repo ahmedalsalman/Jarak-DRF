@@ -26,7 +26,7 @@ SECRET_KEY = '$!8%&wwzb#q%y2q6-^u^3-ud)%ir*ft&=ou3=0q$*7p#je4(^5'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['165.22.93.182', '64.225.110.71', '127.0.0.1']
+ALLOWED_HOSTS = ['165.22.93.182', '64.225.110.71', '127.0.0.1', 'localhost']
 
 SIMPLE_JWT = {
      'ACCESS_TOKEN_LIFETIME': timedelta(hours=72),
