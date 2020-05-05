@@ -22,6 +22,8 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+
+# Change URL names
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('products/', views.ProductList.as_view(), name="products"),
@@ -29,12 +31,19 @@ urlpatterns = [
     path('profile/<int:profile_id>/', views.ProductOwnerProfile.as_view(), name="owner-profile"),
     path('signup/', views.Register.as_view(), name="signup"),
     path('login/', TokenObtainPairView.as_view(), name="login"),
+    # rentals/
     path('rentlist/', views.RentList.as_view(), name="rent-list"),
+    # Change view name to Rent
     path('rent/', views.CreateRent.as_view(), name="rent"),
+    # Change view name to ProductCreate, url_patters -> products/create/
     path('create/', views.Create.as_view(), name="create"),
+    # Change view name to ProductUpdate, url_patters -> products/<int:product_id>/update/
     path('update/<int:product_id>/', views.Update.as_view(), name='update'),
+    # Change view name to ReturnRental, url_patters -> return/<int:rented_item_id>/
     path('return/<int:rentedItem_id>/', views.ReturnRent.as_view(), name='return'),
+    # profile/<int:profile_id>/update/
     path('update_info/<int:profile_id>/', views.ProfileUpdate.as_view(), name='update-info'),
+    # products/<int:product_id>/delete/
     path('delete/<int:product_id>/', views.Delete.as_view(), name='delete'),
 ]
 

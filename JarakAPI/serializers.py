@@ -61,7 +61,7 @@ class CreateProductSerializer(serializers.ModelSerializer):
 		model = Product
 		fields = '__all__'
 
-#Authentication-----------------------------------------------------------------------------------------------
+
 class UserCreateSerializer(serializers.ModelSerializer):
 	password = serializers.CharField(write_only=True)
 
