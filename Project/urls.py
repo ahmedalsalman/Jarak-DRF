@@ -25,16 +25,19 @@ from rest_framework_simplejwt.views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('products/', views.ProductList.as_view(), name="products"),
-    path('profile/', views.ProfileDetails.as_view(), name="profile"),
+    
+    path('profile/', views.Profile.as_view(), name="profile"),
+    # GET for details PUT for update
     path('profile/<int:profile_id>/', views.Profile.as_view(), name="owner-profile"),
+    
     path('signup/', views.Register.as_view(), name="signup"),
     path('login/', TokenObtainPairView.as_view(), name="login"),
+    
     path('rentlist/', views.RentList.as_view(), name="rent-list"),
     path('rent/', views.Rent.as_view(), name="rent"),
     path('create/', views.ProductCreate.as_view(), name="create"),
     path('update/<int:product_id>/', views.ProductUpdate.as_view(), name='update'),
     path('return/<int:rentedItem_id>/', views.ReturnRent.as_view(), name='return'),
-    path('update_info/<int:profile_id>/', views.Profile.as_view(), name='update-info'),
     path('delete/<int:product_id>/', views.ProductDelete.as_view(), name='delete'),
 ]
 

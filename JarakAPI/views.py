@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render
 
 from .models import Product, Profile, RentedItem
-from .permissions import IsProductOwner
+from .permissions import IsProductOwner, ProfileOwner
 from .serializers import  (
     ProductSerializer, RentedListSerializer, ProfileSerializer,
     ProfileUpdateSerializer, CreateProductSerializer, UserCreateSerializer,
@@ -15,7 +15,6 @@ from rest_framework.generics import (
 )
 from rest_framework.permissions import AllowAny, IsAuthenticated,IsAdminUser
 from rest_framework.views import APIView
-
 from datetime import datetime
 
 
@@ -29,24 +28,20 @@ class ProductList(ListAPIView):
     queryset = Product.objects.all()
 
 
-class ProfileDetails(RetrieveAPIView):
-    serializer_class = ProfileSerializer
-    permission_classes = [IsAuthenticated]
-    def get_object(self):
-        return Profile.objects.get(user=self.request.user)
-
-
-
 class Profile(RetrieveUpdateAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Profile.objects.all()
+    permission_classes = [IsAuthenticated, ProfileOwner]
     serializer_class = ProfileUpdateSerializer
-    lookup_field = 'id'
-    lookup_url_kwarg = 'profile_id'
+
+    def get_object(self):
+        profile_id = self.kwargs.get('profile_id')
+        if profile_id is None:
+            return Profile.objects.get(user=self.request.user)
+        else:
+            return Profile.objects.get(id=profile_id)
 
 
 class ProductUpdate(UpdateAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'id'
@@ -61,7 +56,6 @@ class ProductCreate(CreateAPIView):
         serializer.save(owner=self.request.user.profile)
 
 
-
 class RentList(ListAPIView):
     serializer_class = RentedListSerializer
     queryset = RentedItem.objects.all()
@@ -72,15 +66,13 @@ class Rent(CreateAPIView):
     permission_classes = [IsAuthenticated,]
 
 
-
 class ReturnRent(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, rented_item_id, *args, *kwargs):
+    def post(self, request, rented_item_id, *args, **kwargs):
         obj = RentedItem.objects.get(id=rented_item_id)
         obj.end_datetime = datetime.now()
         obj.save()
-
         return Response({"msg": "yay"})
 
 

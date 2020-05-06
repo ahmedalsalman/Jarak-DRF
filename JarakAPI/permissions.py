@@ -9,3 +9,12 @@ class IsProductOwner(BasePermission):
 			return True
 		else:
 			return False
+
+
+class ProfileOwner(BasePermission):
+	message = "This is not your profile"
+
+	def has_object_permission(self, request, view, obj):
+		if request.method == "PUT" and obj.user != request.user:
+			return False
+		return True
