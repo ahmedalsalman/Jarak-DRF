@@ -20,27 +20,31 @@ class ProfileSerializer(serializers.ModelSerializer):
 	def get_avatar(self, obj):
 	  return obj.avatar(512)     
 
+
 class ProductSerializer(serializers.ModelSerializer):
 	owner = ProfileSerializer(read_only=True)
 	rented_by = serializers.SerializerMethodField()
 	
 	class Meta:
 		model = Product
-		fields = ['id', 'owner', 'name', 'description', 'image','image2','image3','image4', 'rented_by']
+		fields = ['id', 'owner', 'name', 'description', 'image', 'rented_by']
 
 	def get_rented_by(self, obj):
 		return obj.rented_by()
+
 
 class RentedSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = RentedItem
 		fields = ['tenant', 'product']
 
+
 class ReturnSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = RentedItem
 		fields = ['end_datetime'] 
+
 
 class RentedListSerializer(serializers.ModelSerializer):
 	product=ProductSerializer()
@@ -51,9 +55,12 @@ class RentedListSerializer(serializers.ModelSerializer):
 
 
 class ProfileUpdateSerializer(serializers.ModelSerializer):
+	avatar=serializers.SerializerMethodField()
 	class Meta:
 		model = Profile
 		fields = ['location','avatar']        
+	def get_avatar(self, obj):
+		return obj.image
 
 
 class CreateProductSerializer(serializers.ModelSerializer):
@@ -61,7 +68,7 @@ class CreateProductSerializer(serializers.ModelSerializer):
 		model = Product
 		fields = '__all__'
 
-#Authentication-----------------------------------------------------------------------------------------------
+
 class UserCreateSerializer(serializers.ModelSerializer):
 	password = serializers.CharField(write_only=True)
 
